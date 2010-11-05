@@ -4,9 +4,17 @@
 # ./build.sh                runs off master
 # ./build.sh BranchName     runs off BranchName
 
-#the cloned repo will live in ../DIRECTORY_ROOT/DIRECTORY_SUFFIX
+#the cloned repo will live in ../DIRECTORY_ROOT/REPO_DIRECTORY
 DIRECTORY_ROOT="../privatebuild/"
-DIRECTORY_SUFFIX="search"
+
+#get the lastest part of the directory name
+IFS="/"
+SPLIT_DIR=(`pwd`)
+SIZE=${#SPLIT_DIR[@]}
+let LAST_INDEX=$SIZE-1
+DIRECTORY_SUFFIX=${SPLIT_DIR[$LAST_INDEX]}
+IFS=""
+
 DIRECTORY="${DIRECTORY_ROOT}${DIRECTORY_SUFFIX}"
 
 if [ -z $1 ]; then
