@@ -1,8 +1,9 @@
 #!/bin/bash
 #run ./build.sh on another terminal window
 #it will clone your existing repo and run the maven tests off this clone
-# ./build.sh                runs off master
-# ./build.sh BranchName     runs off BranchName
+#the branch tests are run from is the current branch
+#
+# ./build.sh
 
 #the cloned repo will live in ../DIRECTORY_ROOT/REPO_DIRECTORY
 DIRECTORY_ROOT="../privatebuild/"
@@ -17,11 +18,7 @@ IFS=""
 
 DIRECTORY="${DIRECTORY_ROOT}${DIRECTORY_SUFFIX}"
 
-if [ -z $1 ]; then
-  BRANCH=master
-else
-  BRANCH=$1
-fi
+BRANCH=`git branch | grep "*" | awk '{print $NF}'`
 
 if [ ! -d "${DIRECTORY}" ]; then
   git clone . $DIRECTORY
@@ -47,9 +44,10 @@ if [ "master" != $BRANCH ]; then
   git branch -D $BRANCH
   git checkout -b $BRANCH origin/$BRANCH
 fi
-echo working on branch $BRANCH
-#safety belt echo
-git branch
+
+echo ""
+echo "***** Working on branch $BRANCH *****"
+echo ""
 
 if [ -e "pom.xml" ]; then
   mvn clean install
